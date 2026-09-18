@@ -11,12 +11,26 @@ import os
 
 PORT = 8000
 
+# Página de entrada del sitio. /index.html se sigue sirviendo tal cual para el
+# dashboard de plantillas, al que apunta el rail de navegación.
+ENTRY_PAGE = '/home-vacantes.html'
+
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path in ('', '/'):
+            self.send_response(302)
+            self.send_header('Location', ENTRY_PAGE)
+            self.end_headers()
+            return
+        super().do_GET()
+
     def end_headers(self):
         # Agregar headers CORS para desarrollo
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        # Sin caché: en desarrollo el navegador debe ver siempre el archivo actual
+        self.send_header('Cache-Control', 'no-store, must-revalidate')
         super().end_headers()
 
     def log_message(self, format, *args):

@@ -5,6 +5,10 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/home-vacantes.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

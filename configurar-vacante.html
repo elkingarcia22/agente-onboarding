@@ -3144,6 +3144,13 @@
                 icon: 'fa-shield-alt',
                 description: 'Verifica certificado de antecedentes judiciales',
                 hasConfig: false
+            },
+            { 
+                id: 'onboarding', 
+                name: 'Onboarding', 
+                icon: 'fa-user-plus',
+                description: 'Acompaña la incorporación del nuevo colaborador',
+                hasConfig: false
             }
         ];
 
@@ -3154,7 +3161,8 @@
             { id: 'evaluacion-psicometrica', name: 'Evaluación psicométrica', icon: 'fa-brain' },
             { id: 'pruebas-tecnicas', name: 'Pruebas técnicas', icon: 'fa-code' },
             { id: 'verificacion', name: 'Verificación', icon: 'fa-shield-check' },
-            { id: 'decision-final', name: 'Decisión final', icon: 'fa-gavel' }
+            { id: 'decision-final', name: 'Decisión final', icon: 'fa-gavel' },
+            { id: 'onboarding', name: 'Onboarding', icon: 'fa-user-plus' }
         ];
 
         // Etapas creadas disponibles para arrastrar
@@ -4424,7 +4432,8 @@
                 'cv-analyzer': 'Analiza CV y asigna puntaje',
                 'interview-ia': 'Genera preguntas y analiza respuestas',
                 'psychometric-analyst': 'Evalúa mediante pruebas psicométricas',
-                'background-check': 'Verifica certificado de antecedentes judiciales'
+                'background-check': 'Verifica certificado de antecedentes judiciales',
+                'onboarding': 'Acompaña la incorporación del nuevo colaborador'
             };
             const agentDescription = agentDescriptions[stage.agentId] || agentData.description;
             
@@ -4433,7 +4442,8 @@
                 'cv-analyzer': 'Este agente revisa automáticamente los CV, evalúa la experiencia del candidato y verifica que su expectativa salarial esté alineada con el rango de la vacante.',
                 'interview-ia': 'Esta IA realiza entrevistas automáticas por teléfono o entrevista virtual, analiza las respuestas del candidato y asigna un puntaje según sus competencias y forma de responder.',
                 'psychometric-analyst': 'Este agente aplica pruebas psicométricas al candidato y calcula un puntaje que refleja sus capacidades cognitivas y/o rasgos relevantes para el puesto.',
-                'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.'
+                'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.',
+                'onboarding': 'Acción manual que abre el chat con el agente de IA de Onboarding: te hace preguntas para parametrizar el flujo de bienvenida y, con tus respuestas, genera el plan de tareas que el nuevo colaborador debe completar para finalizar su onboarding.'
             };
             const agentTooltip = agentTooltips[stage.agentId] || agentDescription;
 
@@ -4696,6 +4706,11 @@
                         </div>
                         ${viewModeDescription}
                         ${configHTML}
+                        ${isEditMode && stage.agentId === 'onboarding' ? `
+                            <div class="stage-description" id="agent-description-${stage.id}">
+                                ${agentDescription}
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
             `;
@@ -4843,10 +4858,22 @@
                     }
                 }
             }
-            
+
+            // Etapas sin configuración desplegable (ej. Onboarding) muestran su
+            // descripción inline en lugar del panel de configuración
+            const descDiv = document.getElementById(`agent-description-${stageId}`);
+            if (descDiv) {
+                descDiv.style.display = stage.expanded ? 'block' : 'none';
+            }
+
             if (chevron) {
-                // El icono siempre es fa-gear, solo cambia el estado activo del botón
-                chevron.className = 'far fa-gear';
+                if (configDiv) {
+                    // El icono siempre es fa-gear, solo cambia el estado activo del botón
+                    chevron.className = 'far fa-gear';
+                } else {
+                    // Chevron de expandir/contraer descripción (ej. Onboarding)
+                    chevron.className = stage.expanded ? 'far fa-chevron-up' : 'far fa-chevron-down';
+                }
             }
         };
 
@@ -6004,7 +6031,8 @@
                     'cv-analyzer': 'Analiza CV y asigna puntaje',
                     'interview-ia': 'Genera preguntas y analiza respuestas',
                     'psychometric-analyst': 'Evalúa mediante pruebas psicométricas',
-                    'background-check': 'Verifica certificado de antecedentes judiciales'
+                    'background-check': 'Verifica certificado de antecedentes judiciales',
+                    'onboarding': 'Acompaña la incorporación del nuevo colaborador'
                 };
                 const agentDescription = descriptions[agent.id] || agent.description;
                 
@@ -6013,7 +6041,8 @@
                     'cv-analyzer': 'Este agente revisa automáticamente los CV, evalúa la experiencia del candidato y verifica que su expectativa salarial esté alineada con el rango de la vacante.',
                     'interview-ia': 'Esta IA realiza entrevistas automáticas por teléfono o entrevista virtual, analiza las respuestas del candidato y asigna un puntaje según sus competencias y forma de responder.',
                     'psychometric-analyst': 'Este agente aplica pruebas psicométricas al candidato y calcula un puntaje que refleja sus capacidades cognitivas y/o rasgos relevantes para el puesto.',
-                    'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.'
+                    'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.',
+                    'onboarding': 'Acción manual que abre el chat con el agente de IA de Onboarding: te hace preguntas para parametrizar el flujo de bienvenida y, con tus respuestas, genera el plan de tareas que el nuevo colaborador debe completar para finalizar su onboarding.'
                 };
                 const agentTooltip = agentTooltips[agent.id] || agentDescription;
                 
@@ -6209,10 +6238,14 @@
                 id: 'agent-' + Date.now(),
                 type: 'agent',
                 agentId: agentId,
+                name: agentData.name,
+                icon: agentData.icon,
+                category: agentData.category,
+                hasConfig: agentData.hasConfig,
                 config: {},
                 expanded: false
             };
-            
+
             // Inicializar configuración por defecto
             if (agentData.config) {
                 Object.entries(agentData.config).forEach(([key, field]) => {
@@ -7997,7 +8030,8 @@
                     'cv-analyzer': 'Analiza CV y asigna puntaje',
                     'interview-ia': 'Genera preguntas y analiza respuestas',
                     'psychometric-analyst': 'Evalúa mediante pruebas psicométricas',
-                    'background-check': 'Verifica certificado de antecedentes judiciales'
+                    'background-check': 'Verifica certificado de antecedentes judiciales',
+                    'onboarding': 'Acompaña la incorporación del nuevo colaborador'
                 };
                 const agentDescription = descriptions[agent.id] || agent.description;
                 
@@ -8006,7 +8040,8 @@
                     'cv-analyzer': 'Este agente revisa automáticamente los CV, evalúa la experiencia del candidato y verifica que su expectativa salarial esté alineada con el rango de la vacante.',
                     'interview-ia': 'Esta IA realiza entrevistas automáticas por teléfono o entrevista virtual, analiza las respuestas del candidato y asigna un puntaje según sus competencias y forma de responder.',
                     'psychometric-analyst': 'Este agente aplica pruebas psicométricas al candidato y calcula un puntaje que refleja sus capacidades cognitivas y/o rasgos relevantes para el puesto.',
-                    'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.'
+                    'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.',
+                    'onboarding': 'Acción manual que abre el chat con el agente de IA de Onboarding: te hace preguntas para parametrizar el flujo de bienvenida y, con tus respuestas, genera el plan de tareas que el nuevo colaborador debe completar para finalizar su onboarding.'
                 };
                 const agentTooltip = agentTooltips[agent.id] || agentDescription;
                 

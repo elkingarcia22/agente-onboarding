@@ -138,6 +138,14 @@ const AGENTS = [
         description: 'Verifica certificado de antecedentes judiciales',
         category: 'verificacion',
         hasConfig: false
+    },
+    { 
+        id: 'onboarding', 
+        name: 'Onboarding', 
+        icon: 'fa-user-plus', 
+        description: 'Acompaña la incorporación del nuevo colaborador',
+        category: 'onboarding',
+        hasConfig: false
     }
 ];
 
@@ -148,7 +156,8 @@ const STAGE_CATEGORIES = [
     { id: 'evaluacion-psicometrica', name: 'Evaluación psicométrica', icon: 'fa-brain' },
     { id: 'pruebas-tecnicas', name: 'Pruebas técnicas', icon: 'fa-code' },
     { id: 'verificacion', name: 'Verificación', icon: 'fa-shield-check' },
-    { id: 'decision-final', name: 'Decisión final', icon: 'fa-gavel' }
+    { id: 'decision-final', name: 'Decisión final', icon: 'fa-gavel' },
+    { id: 'onboarding', name: 'Onboarding', icon: 'fa-user-plus' }
 ];
 
 // Etapas por defecto que siempre deben estar disponibles
@@ -1535,7 +1544,8 @@ function renderAgents() {
             'cv-analyzer': 'Este agente revisa automáticamente los CV, evalúa la experiencia del candidato y verifica que su expectativa salarial esté alineada con el rango de la vacante.',
             'interview-ia': 'Esta IA realiza entrevistas automáticas por teléfono o entrevista virtual, analiza las respuestas del candidato y asigna un puntaje según sus competencias y forma de responder.',
             'psychometric-analyst': 'Este agente aplica pruebas psicométricas al candidato y calcula un puntaje que refleja sus capacidades cognitivas y/o rasgos relevantes para el puesto.',
-            'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.'
+            'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.',
+            'onboarding': 'Acción manual que abre el chat con el agente de IA de Onboarding: te hace preguntas para parametrizar el flujo de bienvenida y, con tus respuestas, genera el plan de tareas que el nuevo colaborador debe completar para finalizar su onboarding.'
         };
         const agentDescription = descriptions[agent.id] || agent.description;
         
@@ -1950,7 +1960,8 @@ function renderAgentStageCard(stage, index) {
         'cv-analyzer': 'Este agente revisa automáticamente los CV, evalúa la experiencia del candidato y verifica que su expectativa salarial esté alineada con el rango de la vacante.',
         'interview-ia': 'Esta IA realiza entrevistas automáticas por teléfono o entrevista virtual, analiza las respuestas del candidato y asigna un puntaje según sus competencias y forma de responder.',
         'psychometric-analyst': 'Este agente aplica pruebas psicométricas al candidato y calcula un puntaje que refleja sus capacidades cognitivas y/o rasgos relevantes para el puesto.',
-        'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.'
+        'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.',
+        'onboarding': 'Acción manual que abre el chat con el agente de IA de Onboarding: te hace preguntas para parametrizar el flujo de bienvenida y, con tus respuestas, genera el plan de tareas que el nuevo colaborador debe completar para finalizar su onboarding.'
     };
     const agentDescription = agentDescriptions[stage.agentId] || agentData.description;
     
@@ -2110,6 +2121,11 @@ function renderAgentStageCard(stage, index) {
                                 <i class="far fa-gear" id="chevron-${stage.id}"></i>
                             </button>
                         ` : ''}
+                        ${stage.agentId === 'onboarding' ? `
+                            <button class="ubits-button ubits-button--tertiary ubits-button--sm ubits-button--icon-only ${isExpanded ? 'ubits-button--active' : ''}" onclick="toggleAgentStageConfig('${stage.id}')" title="Expandir/Contraer descripción">
+                                <i class="far ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'}" id="chevron-${stage.id}"></i>
+                            </button>
+                        ` : ''}
                         ${index > 0 ? `
                             <button class="ubits-button ubits-button--tertiary ubits-button--sm ubits-button--icon-only" onclick="moveAgentStageUp('${stage.id}')" title="Subir">
                                 <i class="far fa-arrow-up"></i>
@@ -2133,6 +2149,12 @@ function renderAgentStageCard(stage, index) {
                     </div>
                 </div>
                 ${configHTML}
+                ${stage.agentId === 'onboarding' ? `
+                    ${isExpanded ? '<div class="custom-stage-divider"></div>' : ''}
+                    <div class="custom-stage-description" id="agent-description-${stage.id}" style="display: ${isExpanded ? 'block' : 'none'};">
+                        <p class="description-text">${agentDescription}</p>
+                    </div>
+                ` : ''}
             </div>
         </div>
     `;
@@ -5752,7 +5774,8 @@ window.showAgentInfo = function(agentId) {
         'cv-analyzer': 'Permite analizar automáticamente la hoja de vida del candidato para identificar su experiencia y formación.',
         'interview-ia': 'Permite realizar entrevistas virtuales asistidas por Serena para profundizar en la experiencia y habilidades del candidato.',
         'psychometric-analyst': 'Permite evaluar las competencias y el perfil psicológico del candidato mediante una prueba estructurada.',
-        'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.'
+        'background-check': 'Permite generar y verificar el certificado de antecedentes judiciales del candidato para validar su historial legal de forma segura.',
+        'onboarding': 'Acción manual que abre el chat con el agente de IA de Onboarding: te hace preguntas para parametrizar el flujo de bienvenida y, con tus respuestas, genera el plan de tareas que el nuevo colaborador debe completar para finalizar su onboarding.'
     };
     
     const description = descriptions[agentId] || agent.description;

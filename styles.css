@@ -116,6 +116,147 @@ html {
     box-sizing: border-box;
 }
 
+/* ============================================================
+   RAIL DE NAVEGACIÓN
+   Copiado del rail de la vista de candidatos (Card candidato:
+   src/components/sidebar/sidebar.css + tokens.css) para que el
+   menú sea idéntico en el home de vacantes y en la vacante.
+   Los tokens se declaran sobre .rail para no tocar el resto.
+   ============================================================ */
+.rail {
+    --rail-width: 99px;
+    --rail-inset: 8px;
+    --radius-rail: 22px;
+    --radius-full: 9999px;
+    --color-surface-nav: #111827;
+    --color-text-nav: rgba(255, 255, 255, 0.9);
+    --color-text-nav-dim: #8b92a0;
+    --color-danger-solid: #ea2027;
+    --shadow-logout: 0 6px 16px rgba(234, 32, 39, 0.35);
+    --duration-fast: 140ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: var(--rail-width);
+    padding: 25px 0 17px;
+    border-radius: var(--radius-rail);
+    background: var(--color-surface-nav);
+    /* En la vista de candidatos el rail es un hijo flex que se estira hasta
+       el alto de la pantalla; aquí se fija con el mismo inset. */
+    position: fixed;
+    left: var(--rail-inset);
+    top: var(--rail-inset);
+    bottom: var(--rail-inset);
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.rail__logo {
+    display: block;
+    color: #ffffff;
+}
+
+.rail__nav {
+    list-style: none;
+    margin: 44px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.rail__nav li {
+    display: flex;
+}
+
+.rail__item {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-nav);
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-out),
+        transform var(--duration-fast) var(--ease-out);
+}
+
+.rail__item:hover {
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+/* Estado seleccionado — la sección actual dentro del rail (p. ej. Colaboradores
+   cuando estás en home-vacantes.html) */
+.rail__item.active {
+    color: #ffffff;
+}
+
+.rail__item.active::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    margin-top: 30px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.rail__spacer {
+    flex: 1;
+    min-height: 40px;
+}
+
+.rail__logout {
+    display: grid;
+    place-items: center;
+    width: 47px;
+    height: 47px;
+    margin-bottom: 23px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: var(--color-danger-solid);
+    color: #ffffff;
+    font-size: 19px;
+    cursor: pointer;
+    box-shadow: var(--shadow-logout);
+    transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.rail__logout:hover {
+    transform: scale(1.06);
+}
+
+.rail__version {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-text-nav-dim);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+}
+
+.rail__version-name {
+    font-weight: 600;
+}
+
+/* Igual que .sidebar: bajo 1024px manda la barra inferior */
+@media (max-width: 1023px) {
+    .rail {
+        display: none;
+    }
+}
+
 /* Contenedor principal para header y body */
 .sidebar-main {
     display: flex;

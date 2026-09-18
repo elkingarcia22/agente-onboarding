@@ -1785,6 +1785,14 @@
             font-weight: 500;
             color: var(--ubits-fg-1-high);
         }
+
+        .table-row-clickable {
+            cursor: pointer;
+        }
+
+        .table-row-clickable:hover {
+            background: var(--ubits-bg-2, rgba(0, 0, 0, 0.02));
+        }
         
         .ubits-table td.table-type {
             color: var(--ubits-fg-1-medium);
@@ -3134,24 +3142,23 @@
                 // Cargar componentes con manejo de errores individual
                 try {
                     if (typeof loadSidebarReclutamiento === 'function') {
-                        loadSidebarReclutamiento('vacantes');
-                        console.log('✅ Sidebar cargado con activeButton: vacantes');
-                        
+                        loadSidebarReclutamiento('colaboradores');
+                        console.log('✅ Sidebar cargado con activeButton: colaboradores');
+
                         // Asegurar que el botón se active después de un pequeño delay
                         setTimeout(() => {
-                            const vacantesButton = document.querySelector('[data-section="vacantes"]');
-                            const plantillasButton = document.querySelector('[data-section="plantillas"]');
-                            
-                            if (vacantesButton) {
+                            const colaboradoresButton = document.querySelector('[data-section="colaboradores"]');
+
+                            if (colaboradoresButton) {
                                 // Remover active de todos los botones
-                                document.querySelectorAll('.nav-button').forEach(btn => {
+                                document.querySelectorAll('.rail__item').forEach(btn => {
                                     btn.classList.remove('active');
                                 });
-                                // Activar solo el botón de vacantes
-                                vacantesButton.classList.add('active');
-                                console.log('✅ Botón vacantes activado manualmente');
+                                // Activar solo el botón de colaboradores
+                                colaboradoresButton.classList.add('active');
+                                console.log('✅ Botón colaboradores activado manualmente');
                             } else {
-                                console.error('❌ No se encontró el botón de vacantes');
+                                console.error('❌ No se encontró el botón de colaboradores');
                             }
                         }, 100);
                     } else {

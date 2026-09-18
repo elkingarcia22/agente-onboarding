@@ -86,7 +86,7 @@ function renderVacantesTable() {
             const modifiedDate = vacante.lastModified ? formatDateForTable(vacante.lastModified) : 'N/A';
             
             return `
-                <tr data-vacante-id="${vacante.id}">
+                <tr data-vacante-id="${vacante.id}" class="table-row-clickable" onclick="openVacante('${vacante.id}', event)">
                     <td class="table-checkbox">
                         <input type="checkbox" class="vacante-checkbox" data-vacante-id="${vacante.id}" onchange="updateSelection()">
                     </td>
@@ -98,7 +98,7 @@ function renderVacantesTable() {
                     <td data-column="created" class="table-date column-created">${createdDate}</td>
                     <td data-column="modified" class="table-date column-modified">${modifiedDate}</td>
                     <td data-column="actions" class="column-actions">
-                        <button class="ubits-button ubits-button--secondary ubits-button--sm" onclick="editVacante('${vacante.id}')" title="Editar">
+                        <button class="ubits-button ubits-button--secondary ubits-button--sm" onclick="editVacante('${vacante.id}', event)" title="Editar">
                             <i class="far fa-pencil"></i>
                             <span>Editar</span>
                         </button>
@@ -185,9 +185,28 @@ function updateSelection() {
 // ACCIONES
 // ========================================
 
-function editVacante(vacanteId) {
+function editVacante(vacanteId, event) {
+    if (event) event.stopPropagation();
     // Redirigir a configurar-vacante.html con el ID de la vacante
     window.location.href = `configurar-vacante.html?id=${vacanteId}`;
+}
+
+function openVacante(vacanteId, event) {
+    // Ignorar clics originados en el checkbox o en los botones de acciones
+    if (event && event.target.closest('.table-checkbox, .column-actions')) {
+        return;
+    }
+
+    const vacante = currentVacantes.find(v => v.id === vacanteId);
+    const isActiva = vacante && vacante.status === 'activa';
+
+    if (isActiva) {
+        // Vacantes activas muestran el panel de candidatos
+        window.location.href = `panel-candidatos/index.html?id=${vacanteId}`;
+    } else {
+        // Vacantes en borrador van directo a configuración
+        window.location.href = `configurar-vacante.html?id=${vacanteId}`;
+    }
 }
 
 // ========================================
@@ -222,18 +241,38 @@ function setupEventListeners() {
 // CREAR VACANTES DE EJEMPLO (para testing)
 // ========================================
 
-// Crear vacantes de ejemplo automáticamente si no hay vacantes
+// Las vacantes de ejemplo se reconcilian en cada carga: si el navegador ya
+// tiene guardadas algunas de antes, se agregan solo las que falten en vez de
+// no hacer nada (antes solo se sembraban con la lista vacía, así que quien ya
+// tenía datos nunca veía las nuevas).
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        if (currentVacantes.length === 0) {
-            // Crear 2 vacantes de ejemplo
-            createExampleVacantes();
-        }
-    }, 500);
+    setTimeout(ensureExampleVacantes, 500);
 });
 
+// Vacantes de demo que ya no se usan: se retiran de navegadores que las
+// tengan guardadas de versiones anteriores.
+const RETIRED_EXAMPLE_IDS = ['vacante-1', 'vacante-2'];
+
+function ensureExampleVacantes() {
+    const examples = buildExampleVacantes();
+    const kept = currentVacantes.filter(v => !RETIRED_EXAMPLE_IDS.includes(v.id));
+    const existingIds = new Set(kept.map(v => v.id));
+    const missing = examples.filter(v => !existingIds.has(v.id));
+
+    const changed = missing.length > 0 || kept.length !== currentVacantes.length;
+    if (!changed) return;
+
+    currentVacantes = [...kept, ...missing];
+    saveVacantesToStorage();
+    filteredVacantes = [...currentVacantes];
+    renderVacantesTable();
+    updateVacantesCount();
+
+    console.log('✅ [ensureExampleVacantes] Vacantes sincronizadas:', currentVacantes.map(v => v.id));
+}
+
 // Función para crear vacantes de ejemplo
-function createExampleVacantes() {
+function buildExampleVacantes() {
     const now = new Date();
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
@@ -242,8 +281,8 @@ function createExampleVacantes() {
     
     const exampleVacantes = [
         {
-            id: 'vacante-1',
-            name: 'Desarrollador Frontend React',
+            id: 'vacante-3',
+            name: 'HRBP',
             templateName: 'Estándar de selección con IA',
             templateId: 'default-template-ia',
             status: 'activa',
@@ -251,21 +290,15 @@ function createExampleVacantes() {
             lastModified: yesterday.toISOString()
         },
         {
-            id: 'vacante-2',
-            name: 'Diseñador UX/UI',
-            templateName: 'Estándar de selección',
-            templateId: 'default-template-standard',
-            status: 'draft',
+            id: 'vacante-4',
+            name: 'Analista de Datos',
+            templateName: 'Estándar de selección con IA',
+            templateId: 'default-template-ia',
+            status: 'activa',
             createdAt: yesterday.toISOString(),
             lastModified: now.toISOString()
         }
     ];
-    
-    currentVacantes = [...exampleVacantes];
-    saveVacantesToStorage();
-    filteredVacantes = [...currentVacantes];
-    renderVacantesTable();
-    updateVacantesCount();
-    
-    console.log('✅ [createExampleVacantes] 2 vacantes de ejemplo creadas');
+
+    return exampleVacantes;
 }
