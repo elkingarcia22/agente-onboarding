@@ -196,7 +196,7 @@ html {
 }
 
 /* Estado seleccionado — la sección actual dentro del rail (p. ej. Colaboradores
-   cuando estás en home-vacantes.html) */
+   cuando estás en index.html) */
 .rail__item.active {
     color: #ffffff;
 }

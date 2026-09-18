@@ -59,7 +59,7 @@ const TOP_NAV_VARIANTS = {
     vacantes: {
         name: 'Vacantes',
         tabs: [
-            { id: 'vacantes', label: 'Vacantes', icon: 'far fa-briefcase', url: 'home-vacantes.html' }
+            { id: 'vacantes', label: 'Vacantes', icon: 'far fa-briefcase', url: 'index.html' }
         ]
     }
 };

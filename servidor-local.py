@@ -13,7 +13,7 @@ PORT = 8000
 
 # Página de entrada del sitio. /index.html se sigue sirviendo tal cual para el
 # dashboard de plantillas, al que apunta el rail de navegación.
-ENTRY_PAGE = '/home-vacantes.html'
+ENTRY_PAGE = '/index.html'
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):

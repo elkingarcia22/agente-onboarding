@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UBITS - Dashboard de Vacantes</title>
+    <title>UBITS - Dashboard de Plantillas</title>
     
     <!-- Estilos UBITS oficiales -->
     <link rel="stylesheet" href="ubits-colors.css">
@@ -1455,13 +1455,10 @@
             }
         }
         
-        /* Tabla de vacantes UBITS */
-        .vacantes-table-container {
+        /* Tabla de plantillas UBITS */
+        .templates-table-container {
             width: 100%;
-            max-width: 100%;
             margin-top: 0;
-            margin-left: 0;
-            margin-right: 0;
             background: var(--ubits-bg-1);
             border-radius: 8px;
             overflow: hidden;
@@ -1470,45 +1467,15 @@
             box-sizing: border-box;
         }
         
-        /* Estilos específicos para el dashboard de vacantes */
-        .dashboard-vacantes {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            flex: 1;
-            min-width: 0;
-            width: 100%;
-            max-width: 100%;
-            overflow: visible;
-            max-height: none;
-            margin: 0;
-            padding: 0;
-        }
-        
         /* Ajustar espaciado desde el subnav - 24px */
         #top-nav-container + .content-area {
             margin-top: 24px;
         }
         
-        /* Asegurar que dashboard-vacantes no agregue espacio extra */
-        .content-area .dashboard-vacantes {
+        /* Asegurar que dashboard-plantillas no agregue espacio extra */
+        .content-area .dashboard-plantillas {
             margin-top: 0;
             padding-top: 0;
-            width: 100%;
-            max-width: 100%;
-        }
-        
-        /* Asegurar que content-area ocupe todo el ancho disponible */
-        .content-area {
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-        
-        /* Asegurar que main-content no limite el ancho */
-        .main-content {
-            width: 100%;
-            max-width: 100%;
         }
 
         /* Header dentro del contenedor de la tabla */
@@ -1603,12 +1570,12 @@
         }
         
         /* Asegurar que la tabla y su contenedor respeten el padding */
-        .vacantes-table-container .view-container {
+        .templates-table-container .view-container {
             width: 100%;
             box-sizing: border-box;
         }
         
-        .vacantes-table-container .ubits-table {
+        .templates-table-container .ubits-table {
             margin: 0;
             width: 100%;
             box-sizing: border-box;
@@ -1784,14 +1751,6 @@
         .ubits-table td.table-name {
             font-weight: 500;
             color: var(--ubits-fg-1-high);
-        }
-
-        .table-row-clickable {
-            cursor: pointer;
-        }
-
-        .table-row-clickable:hover {
-            background: var(--ubits-bg-2, rgba(0, 0, 0, 0.02));
         }
         
         .ubits-table td.table-type {
@@ -2024,17 +1983,17 @@
         }
         
         /* Modo oscuro para la tabla */
-        [data-theme="dark"] .vacantes-table-container {
+        [data-theme="dark"] .templates-table-container {
             background: var(--ubits-bg-1);
             border: none;
             padding: 16px !important;
         }
 
-        [data-theme="dark"] .vacantes-table-container .dashboard-header {
+        [data-theme="dark"] .templates-table-container .dashboard-header {
             margin-bottom: 16px;
         }
 
-        [data-theme="dark"] .vacantes-table-container .search-bar-container {
+        [data-theme="dark"] .templates-table-container .search-bar-container {
             margin-bottom: 16px;
         }
         
@@ -2094,15 +2053,15 @@
             
             <!-- Content Area -->
             <div class="content-area">
-                <!-- Dashboard de Vacantes -->
-                <div class="dashboard-vacantes">
-                    <!-- Tabla de vacantes -->
-                    <div id="vacantesTableContainer" class="vacantes-table-container">
+                <!-- Dashboard de Plantillas -->
+                <div class="dashboard-plantillas">
+                    <!-- Tabla de plantillas -->
+                    <div id="templatesTableContainer" class="templates-table-container">
                         <!-- Header del dashboard dentro del contenedor de la tabla -->
                         <div class="dashboard-header">
                             <div class="header-title-section">
-                                <h1 class="dashboard-title">Lista de vacantes</h1>
-                                <span class="vacantes-count-number"><span id="vacantesCount">0</span> vacantes</span>
+                                <h1 class="dashboard-title">Lista de plantillas</h1>
+                                <span class="templates-count-number"><span id="templatesCount">0</span> plantillas</span>
                             </div>
                             <div class="header-controls-section">
                                 <!-- Contenedor de búsqueda que alterna entre botón e input -->
@@ -2166,10 +2125,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Botón primario crear vacante -->
-                                <button class="ubits-button ubits-button--primary ubits-button--sm" onclick="createVacante()">
+                                <!-- Botón primario crear plantilla -->
+                                <button class="ubits-button ubits-button--primary ubits-button--sm" onclick="openCreateTemplateModal()">
                                     <i class="far fa-plus"></i>
-                                    <span>Crear vacante</span>
+                                    <span>Crear plantilla</span>
                                 </button>
                             </div>
                         </div>
@@ -2193,11 +2152,11 @@
 
                         <!-- Contenedor de tabla (vista por defecto) -->
                         <div id="tableViewContainer" class="view-container">
-                            <table class="ubits-table" id="vacantesTable">
+                            <table class="ubits-table" id="templatesTable">
                             <thead>
                                 <tr>
                                     <th class="table-checkbox">
-                                        <input type="checkbox" id="selectAllVacantes" title="Seleccionar todas">
+                                        <input type="checkbox" id="selectAllTemplates" title="Seleccionar todas">
                                     </th>
                                     <th data-column="name" class="column-name">
                                         <div class="table-header-content">
@@ -2207,14 +2166,20 @@
                                             </button>
                                         </div>
                                     </th>
-                                    <th data-column="template" class="column-template">
+                                    <th data-column="category" class="column-category">
                                         <div class="table-header-content">
-                                            <span>Plantilla</span>
+                                            <span>Categoría</span>
+                                            <button class="ubits-button ubits-button--tertiary ubits-button--icon-only ubits-button--sm table-sort-btn" data-sort="category" title="Ordenar por categoría">
+                                                <i class="far fa-arrow-down-arrow-up"></i>
+                                            </button>
                                         </div>
                                     </th>
                                     <th data-column="status" class="column-status">
                                         <div class="table-header-content">
                                             <span>Estado</span>
+                                            <button class="ubits-button ubits-button--tertiary ubits-button--icon-only ubits-button--sm table-sort-btn" data-sort="status" title="Ordenar por estado">
+                                                <i class="far fa-arrow-down-arrow-up"></i>
+                                            </button>
                                         </div>
                                     </th>
                                     <th data-column="created" class="column-created">
@@ -2233,14 +2198,25 @@
                                             </button>
                                         </div>
                                     </th>
-                                    <th data-column="actions" class="column-actions">
+                                    <th data-column="agents" class="column-agents">
                                         <div class="table-header-content">
-                                            <span>Acciones</span>
+                                            <span>Agentes IA</span>
+                                            <button class="ubits-button ubits-button--tertiary ubits-button--icon-only ubits-button--sm table-sort-btn" data-sort="agents" title="Ordenar por agentes IA">
+                                                <i class="far fa-arrow-down-arrow-up"></i>
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th data-column="stages" class="column-stages">
+                                        <div class="table-header-content">
+                                            <span>Etapas</span>
+                                            <button class="ubits-button ubits-button--tertiary ubits-button--icon-only ubits-button--sm table-sort-btn" data-sort="stages" title="Ordenar por etapas">
+                                                <i class="far fa-arrow-down-arrow-up"></i>
+                                            </button>
                                         </div>
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id="vacantesTableBody">
+                            <tbody id="templatesTableBody">
                                 <!-- Las filas se cargarán dinámicamente aquí -->
                             </tbody>
                         </table>
@@ -2331,8 +2307,8 @@
     <script src="components/toast.js"></script>
     <script src="script.js"></script>
 
-    <!-- Scripts del dashboard de vacantes -->
-    <script src="dashboard-vacantes.js"></script>
+    <!-- Scripts del dashboard de plantillas -->
+    <script src="dashboard-plantillas.js"></script>
     
     <script>
         // Funciones para los controles del header
@@ -2598,7 +2574,7 @@
         }
 
         function clearAllFilters() {
-            // Usar la función de dashboard-vacantes.js si existe (evita duplicación)
+            // Usar la función de dashboard-plantillas.js si existe (evita duplicación)
             if (typeof window.clearAllFiltersFromDashboard === 'function') {
                 window.clearAllFiltersFromDashboard();
                 return;
@@ -2908,7 +2884,7 @@
 
         // Funciones de vista de cards eliminadas - solo se usa tabla
 
-        // Exponer funciones de la barra de acciones globalmente después de cargar dashboard-vacantes.js
+        // Exponer funciones de la barra de acciones globalmente después de cargar dashboard-plantillas.js
         setTimeout(() => {
             if (typeof viewSelectedTemplates === 'function') {
                 window.viewSelectedTemplates = viewSelectedTemplates;
@@ -3142,25 +3118,8 @@
                 // Cargar componentes con manejo de errores individual
                 try {
                     if (typeof loadSidebarReclutamiento === 'function') {
-                        loadSidebarReclutamiento('colaboradores');
-                        console.log('✅ Sidebar cargado con activeButton: colaboradores');
-
-                        // Asegurar que el botón se active después de un pequeño delay
-                        setTimeout(() => {
-                            const colaboradoresButton = document.querySelector('[data-section="colaboradores"]');
-
-                            if (colaboradoresButton) {
-                                // Remover active de todos los botones
-                                document.querySelectorAll('.rail__item').forEach(btn => {
-                                    btn.classList.remove('active');
-                                });
-                                // Activar solo el botón de colaboradores
-                                colaboradoresButton.classList.add('active');
-                                console.log('✅ Botón colaboradores activado manualmente');
-                            } else {
-                                console.error('❌ No se encontró el botón de colaboradores');
-                            }
-                        }, 100);
+                        loadSidebarReclutamiento('plantillas');
+                        console.log('✅ Sidebar cargado');
                     } else {
                         console.error('❌ loadSidebarReclutamiento no está definido');
                     }
@@ -3181,7 +3140,7 @@
                         const plantillasTabs = [
                             { id: 'plantillas', label: 'Plantillas', active: true }
                         ];
-                        loadSubNav('top-nav-container', 'vacantes');
+                        loadSubNav('top-nav-container', 'template', plantillasTabs);
                         console.log('✅ SubNav cargado');
                     } else {
                         console.error('❌ loadSubNav no está definido');
@@ -3223,11 +3182,11 @@
                     console.error('❌ Error al cargar Profile Menu:', error);
                 }
                 
-                // Activar vacantes en el floating menu
+                // Activar plantillas en el floating menu
                 setTimeout(() => {
                     try {
                         if (typeof setActiveDirectLinkReclutamiento === 'function') {
-                            setActiveDirectLinkReclutamiento('vacantes');
+                            setActiveDirectLinkReclutamiento('plantillas');
                             console.log('✅ Floating menu activado');
                         }
                     } catch (error) {
@@ -3235,13 +3194,13 @@
                     }
                 }, 500);
                 
-                // Inicializar dashboard de vacantes
+                // Inicializar dashboard de plantillas
                 try {
-                    if (typeof initializeVacantesDashboard === 'function') {
-                        initializeVacantesDashboard();
+                    if (typeof initializeDashboard === 'function') {
+                        initializeDashboard();
                         console.log('✅ Dashboard inicializado');
                     } else {
-                        console.error('❌ initializeVacantesDashboard no está definido');
+                        console.error('❌ initializeDashboard no está definido');
                     }
                     
                     // Inicializar badge de filtros
@@ -3279,11 +3238,6 @@
                 }
             }
         });
-        
-        // Función para crear vacante - redirige a configurar-vacante.html
-        function createVacante() {
-            window.location.href = 'configurar-vacante.html';
-        }
     </script>
 </body>
 </html>

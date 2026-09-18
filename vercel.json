@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/home-vacantes.html"
+      "destination": "/index.html"
     },
     {
       "source": "/(.*)",
