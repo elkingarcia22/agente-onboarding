@@ -42,17 +42,17 @@ function loadSidebarReclutamiento(activeButton = null) {
                 </li>
                 <li>
                     <button type="button" class="rail__item" data-section="personas" aria-label="Personas" title="Personas">
-                        <i class="fas fa-users"></i>
+                        <i class="far fa-users"></i>
                     </button>
                 </li>
                 <li>
                     <button type="button" class="rail__item" data-section="vacantes" aria-label="Vacantes" title="Vacantes" onclick="window.location.href='index.html'">
-                        <i class="fas fa-briefcase"></i>
+                        <i class="far fa-briefcase"></i>
                     </button>
                 </li>
                 <li>
                     <button type="button" class="rail__item" data-section="plantillas" aria-label="Plantillas" title="Plantillas" onclick="window.location.href='home-plantillas.html'">
-                        <i class="fas fa-file-alt"></i>
+                        <i class="far fa-file-alt"></i>
                     </button>
                 </li>
                 <li>
