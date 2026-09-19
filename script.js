@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const windowHeight = window.innerHeight;
         
         // Ajustar sidebar para pantallas pequeñas
-        if (windowWidth <= 768) {
+        if (windowWidth <= 768 && sidebar) {
             sidebar.style.width = '80px';
             sidebar.style.minWidth = '80px';
             sidebar.style.left = '8px';

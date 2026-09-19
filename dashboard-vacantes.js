@@ -297,6 +297,15 @@ function buildExampleVacantes() {
             status: 'activa',
             createdAt: yesterday.toISOString(),
             lastModified: now.toISOString()
+        },
+        {
+            id: 'vacante-5',
+            name: 'Diseñador/a UX Senior',
+            templateName: 'Estándar de selección con IA',
+            templateId: 'default-template-ia',
+            status: 'activa',
+            createdAt: yesterday.toISOString(),
+            lastModified: now.toISOString()
         }
     ];
 

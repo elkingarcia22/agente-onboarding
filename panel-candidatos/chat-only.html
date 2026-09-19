@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script>
+      // Read optional edit data from URL params
+      (function() {
+        var params = new URLSearchParams(window.location.search);
+        var editData = params.get('editData');
+        var initialPlan = [];
+        var initialMode = 'choice';
+        if (editData) {
+          try {
+            var parsed = JSON.parse(decodeURIComponent(editData));
+            initialPlan = parsed.initialPlan || [];
+            initialMode = parsed.initialMode || 'choice';
+          } catch(e) {}
+        }
+
+        window.__MOUNT_PV_ONLY__ = true;
+        window.__PV_PROPS__ = {
+          isOpen: true,
+          candidateName: "Mariana Suárez",
+          candidateEmail: "mariana.suarez@email.com",
+          identification: "SULM940213MDFRND04",
+          phone: "+57 310 555 2048",
+          city: "Ciudad de México",
+          country: "México",
+          initialPlan: initialPlan,
+          initialMode: initialMode,
+          onClose: function() { window.parent.postMessage({ type: 'closePV' }, '*'); }
+        };
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-BF1UmWzM.js?v=22"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BBiXTHZ1.css">
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body {
+        width: 100%; height: 100%;
+        margin: 0; padding: 0;
+        background: transparent !important;
+        overflow: hidden;
+      }
+      #root {
+        position: fixed;
+        top: 0; right: 0; bottom: 0;
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-end;
+        background: transparent !important;
+        pointer-events: none;
+      }
+      #root > * { pointer-events: auto; }
+      #backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.3);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="backdrop" onclick="window.parent.postMessage({type: 'closePV'}, '*')"></div>
+    <div id="root"></div>
+  </body>
+</html>
