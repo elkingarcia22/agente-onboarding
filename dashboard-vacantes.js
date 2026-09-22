@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Vacantes de demo que ya no se usan: se retiran de navegadores que las
 // tengan guardadas de versiones anteriores.
-const RETIRED_EXAMPLE_IDS = ['vacante-1', 'vacante-2'];
+const RETIRED_EXAMPLE_IDS = ['vacante-1', 'vacante-2', 'vacante-5'];
 
 function ensureExampleVacantes() {
     const examples = buildExampleVacantes();
