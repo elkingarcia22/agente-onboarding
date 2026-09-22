@@ -280,15 +280,8 @@ function buildExampleVacantes() {
     lastWeek.setDate(lastWeek.getDate() - 7);
     
     const exampleVacantes = [
-        {
-            id: 'vacante-3',
-            name: 'HRBP',
-            templateName: 'Estándar de selección con IA',
-            templateId: 'default-template-ia',
-            status: 'activa',
-            createdAt: lastWeek.toISOString(),
-            lastModified: yesterday.toISOString()
-        },
+            // HRBP remoted as requested
+
         {
             id: 'vacante-4',
             name: 'Analista de Datos',

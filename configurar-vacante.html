@@ -6383,17 +6383,12 @@
                 }, 300);
             }
             
-            // Si es Onboarding, abrir drawer de onboarding
+            // Si es Onboarding, simplemente agregarlo sin abrir el drawer (como en plantillas)
             if (agentId === 'onboarding') {
-                // Resetear plan para que abra el chat fresco
                 window._onboardingPlanData = null;
-                setTimeout(() => {
-                    if (typeof window.openOnboardingConfigDrawer === 'function') {
-                        window.openOnboardingConfigDrawer(newAgentStage.id);
-                    }
-                }, 300);
             }
         };
+
 
         // Cambiar tab en la biblioteca
         window.switchTab = function(tabName) {
