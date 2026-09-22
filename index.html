@@ -1464,7 +1464,8 @@
             margin-right: 0;
             background: var(--ubits-bg-1);
             border-radius: 8px;
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             border: none;
             padding: 16px !important;
             box-sizing: border-box;
@@ -1507,8 +1508,7 @@
         
         /* Asegurar que main-content no limite el ancho */
         .main-content {
-            width: 100%;
-            max-width: 100%;
+            /* Eliminado width: 100% para no romper el margen y cálculo responsivo de styles.css */
         }
 
         /* Header dentro del contenedor de la tabla */

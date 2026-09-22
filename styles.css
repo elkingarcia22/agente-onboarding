@@ -775,13 +775,13 @@ body[data-theme="dark"] .content-area.no-background {
     }
     
     .main-content {
-        margin: 16px 12px 0 0;
-        padding-left: 108px;
+        margin: 16px 12px 0 108px;
+        padding-left: 0;
         width: calc(100vw - 108px - 12px);
         max-width: calc(100vw - 108px - 12px);
         gap: 20px;
         position: relative;
-        overflow-x: hidden;
+        overflow-x: auto;
         overflow-y: visible;
         max-height: none;
     }

@@ -28,10 +28,9 @@
             flex-direction: column;
             gap: 16px !important; /* Forzar gap consistente */
             flex: 1;
+            min-height: 0;
             min-width: 0;
             width: 100%;
-            overflow: visible;
-            max-height: none;
         }
 
         /* Asegurar que todas las secciones tengan el mismo gap */
@@ -111,14 +110,14 @@
             min-width: 0;
             display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 600px;
+            min-height: 0;
         }
 
         /* Widget de flujo en section-dual */
         .section-dual > .widget-template-flow {
             flex: 1;
             min-width: 0;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -574,7 +573,8 @@
         /* Sidebar de agentes */
         .agents-sidebar {
             width: 100%;
-            height: 100%;
+            flex: 1;
+            min-height: 0;
             background: var(--ubits-bg-1);
             border: none;
             border-width: 0;
@@ -587,36 +587,34 @@
             flex-direction: column;
             gap: 16px;
             box-sizing: border-box;
-            overflow-x: visible;
-            overflow-y: hidden; /* Sin scroll en el sidebar completo */
-            min-height: 0;
-            flex: 1;
+            overflow: hidden;
             position: relative;
         }
 
-        /* Asegurar que los tabs no corten el badge */
+        /* Los tab-content participan en el flex para el scroll */
         .tab-content {
-            overflow: visible !important;
-        }
-        
-        #stages-tab {
-            overflow: visible !important;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
         }
 
         /* Solo la lista de etapas debe tener scroll, no todo el tab */
         .agents-sidebar .stages-list {
             overflow-y: auto;
-            overflow-x: visible;
+            overflow-x: hidden;
             flex: 1;
             min-height: 0;
-            /* Permitir scroll independiente sin bloquear el scroll principal */
-            max-height: calc(100vh - 300px);
+            /* max-height explícito para garantizar scroll en cualquier pantalla:
+               100vh - stepper(96px) - gap(16px) - config(120px) - gap(16px)
+               - agents-header(60px) - tabs(44px) - controls(44px) - gaps internos(64px) */
+            max-height: calc(100vh - 460px);
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Mismo gap que .agents-list */
+            gap: 8px;
             margin-top: 0;
-            padding-bottom: 24px; /* Padding extra al final para que el scroll llegue hasta el final */
-            /* Scroll UBITS */
+            padding-bottom: 24px;
             scrollbar-width: thin;
             scrollbar-color: var(--ubits-fg-1-low) transparent;
         }
@@ -649,15 +647,14 @@
         /* Lista de agentes también con scroll solo en la lista */
         .agents-sidebar .agents-list {
             overflow-y: auto;
-            overflow-x: visible;
+            overflow-x: hidden;
             flex: 1;
             min-height: 0;
-            max-height: calc(100vh - 300px);
+            max-height: calc(100vh - 460px);
             display: flex;
             flex-direction: column;
             gap: 8px;
-            padding-bottom: 24px; /* Padding extra al final para que el scroll llegue hasta el final */
-            /* Scroll UBITS */
+            padding-bottom: 24px;
             scrollbar-width: thin;
             scrollbar-color: var(--ubits-fg-1-low) transparent;
         }
@@ -1793,18 +1790,16 @@
         }
 
         /* Mantener fija la fila con selector de plantilla y notificaciones */
-        /* Altura aproximada del stepper (80px) + gap (16px) = 96px */
+        /* La sección de configuración tiene tamaño natural y no crece */
         .sticky-config-section {
-            position: sticky;
-            top: calc(80px + 16px); /* Altura del stepper + gap */
+            flex: 0 0 auto;
             z-index: 4;
         }
 
-        /* Mantener fijos los contenedores de biblioteca y flujo del candidato */
-        /* Altura del stepper (80px) + gap (16px) + altura de config (120px) + gap (16px) = 232px */
+        /* La sección de etapas ocupa todo el espacio restante */
         .template-flow-section {
-            position: sticky;
-            top: calc(80px + 16px + 120px + 16px); /* Altura stepper + gap + altura config + gap */
+            flex: 1;
+            min-height: 0;
             z-index: 3;
             width: 100%;
             max-width: 100%;
@@ -1820,37 +1815,33 @@
             width: 100%;
         }
 
-        /* Asegurar que main-content y content-area no causen scroll */
+        /* Esta página usa altura de viewport fijo con scroll interno */
         .main-content {
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            /* Calcular ancho correctamente según el sidebar */
             width: calc(100vw - 143px - 24px) !important;
-            max-width: none !important;
+            max-width: calc(100vw - 143px - 24px) !important;
+            margin-left: 143px !important;
+            margin-right: 24px !important;
+            box-sizing: border-box;
         }
-        
-        /* Override más específico para pantallas grandes */
-        @media (min-width: 1440px) {
-            .dashboard-container .main-content,
-            body .main-content,
-            html body .main-content {
-                width: calc(100vw - 143px - 24px) !important;
-                max-width: none !important;
-                margin-left: 143px !important;
-                margin-right: 24px !important;
+
+        /* En pantallas pequeñas, el sidebar tiene 80px (según styles.css @768) */
+        @media (max-width: 768px) {
+            .main-content {
+                width: calc(100vw - 108px - 12px) !important;
+                max-width: calc(100vw - 108px - 12px) !important;
+                margin-left: 108px !important;
+                margin-right: 12px !important;
             }
-        }
-        
-        /* Override para todas las resoluciones */
-        .dashboard-container .main-content,
-        body .main-content {
-            width: calc(100vw - 143px - 24px) !important;
-            max-width: none !important;
         }
 
         .content-area {
-            height: 100%;
+            flex: 1;
+            min-height: 0;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -1861,10 +1852,12 @@
         }
 
         .content-sections {
-            height: 100%;
+            flex: 1;
+            min-height: 0;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            gap: 16px;
         }
 
         .stages-container {
@@ -2654,80 +2647,9 @@
         </div>
         <div class="drawer-body" style="padding: 0; display: flex; flex-direction: column; background: #fafafa;">
             
-            <!-- STEP 1: CHAT EXPERIENCE -->
-            <div id="onboarding-step-1" style="display: flex; flex-direction: column; flex: 1; height: 100%;">
-                
-                <!-- Progress Bars -->
-                <div style="flex-shrink: 0; padding: 12px 24px; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; gap: 6px; background: white;">
-                    <div style="flex: 1;">
-                        <div style="height: 4px; border-radius: 9999px; background: #6366f1; transition: background 0.3s;" id="ob-prog-1"></div>
-                        <p style="margin-top: 6px; font-size: 10px; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Compliance</p>
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="height: 4px; border-radius: 9999px; background: #e5e7eb; transition: background 0.3s;" id="ob-prog-2"></div>
-                        <p style="margin-top: 6px; font-size: 10px; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Clarification & Culture</p>
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="height: 4px; border-radius: 9999px; background: #e5e7eb; transition: background 0.3s;" id="ob-prog-3"></div>
-                        <p style="margin-top: 6px; font-size: 10px; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Connection</p>
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="height: 4px; border-radius: 9999px; background: #e5e7eb; transition: background 0.3s;" id="ob-prog-4"></div>
-                        <p style="margin-top: 6px; font-size: 10px; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Check-back</p>
-                    </div>
-                </div>
-
-                <!-- Messages Area -->
-                <div style="flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px;" id="onboarding-chat-messages">
-                    <!-- Initial AI Message -->
-                    <div style="display: flex; justify-content: flex-start;">
-                        <div style="display: flex; align-items: flex-start; gap: 12px; max-width: 95%;">
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background-image: linear-gradient(to top right, #60a5fa, #6366f1, #a855f7); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); flex-shrink: 0; margin-top: 4px; border: 2px solid white;"></div>
-                            <div style="padding: 16px; border-radius: 16px; border-top-left-radius: 0; font-size: 14px; line-height: 1.6; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); white-space: pre-line; background: white; border: 1px solid #f3f4f6; color: #334155;">¡Hola! Vamos a configurar el plan de onboarding para el nuevo talento. Para empezar y poder darle acceso a la plataforma, tengo estos datos preliminares:
-
-Nombre*: Mariana Suárez Londoño
-Correo*: mariana.suarez@email.com
-Identificación: SULM940213MDFRND04
-Teléfono: +57 310 555 2048
-Ciudad: Ciudad de México
-País: México
-
-(*) Nombre y correo son los obligatorios para darle acceso; el resto es opcional.
-
-¿Son correctos o necesitas actualizar/agregar algo más?</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Input / Choices Area -->
-                <div style="padding: 16px 24px; background: white; border-top: 1px solid #f3f4f6;" id="onboarding-chat-input-area">
-                    
-                    <!-- Choices Box -->
-                    <div id="onboarding-choices-box" style="margin-bottom: 12px; border-radius: 16px; border: 1px solid #e5e7eb; background: white; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); overflow: hidden;">
-                        <button type="button" onclick="obChatSelectChoice(1, 'Los datos están correctos')" style="display: flex; width: 100%; items-center; gap: 12px; border-bottom: 1px solid #f3f4f6; padding: 12px 16px; text-align: left; background: white; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                            <span style="display: flex; height: 24px; width: 24px; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid #c7d2fe; font-size: 11px; font-weight: 600; color: #6366f1;">1</span>
-                            <span style="font-size: 14px; color: #334155; font-weight: 500;">Los datos están correctos</span>
-                        </button>
-                        <div style="display: flex; flex-direction: column; width: 100%; border-bottom: 1px solid #f3f4f6; padding: 12px 16px; text-align: left; background: white;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                <span style="display: flex; height: 24px; width: 24px; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid #c7d2fe; font-size: 11px; font-weight: 600; color: #6366f1;">2</span>
-                                <span style="font-size: 14px; color: #334155; font-weight: 500;">Necesito corregir algo</span>
-                            </div>
-                            <input type="text" id="ob-custom-input-1" placeholder="Escribe tu propia respuesta aquí" style="margin-top: 4px; width: 100%; border-radius: 6px; border: 1px solid #d1d5db; background: white; padding: 8px 12px; font-size: 14px; color: #334155; outline: none;" onkeydown="if(event.key==='Enter' && this.value.trim()!==''){ obChatSelectChoice(2, this.value); }">
-                        </div>
-                    </div>
-
-                    <!-- Main Textarea Input -->
-                    <div style="display: flex; flex-direction: column; border-radius: 16px; border: 1px solid #e5e7eb; background: white; padding: 12px; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);">
-                        <textarea rows="2" id="ob-main-textarea" placeholder="Elige una opción o escribe tu respuesta..." style="width: 100%; resize: none; border: none; background: transparent; font-size: 14px; color: #334155; outline: none; margin-bottom: 8px;"></textarea>
-                        <div style="display: flex; justify-content: flex-end;">
-                            <button type="button" onclick="obChatSendText()" style="display: flex; height: 36px; width: 36px; items-center; justify-content: center; border-radius: 50%; background-image: linear-gradient(to top right, #818cf8, #a855f7); color: white; border: none; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); opacity: 0.5;" id="ob-send-btn">
-                                <i class="far fa-arrow-up" style="font-size: 14px;"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <p style="margin-top: 12px; text-align: center; font-size: 10px; color: #9ca3af;">Agentes AI puede cometer errores, verifica las respuestas.</p>
-                </div>
+            <!-- STEP 1: CHAT EXPERIENCE — el iframe carga el chat dentro del drawer -->
+            <div id="onboarding-step-1" style="display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;">
+                <iframe id="onboardingChatIframe" src="" style="flex: 1; width: 100%; height: 100%; border: none; min-height: 0; display: block;"></iframe>
             </div>
 
             <!-- STEP 2: CONFIGURATION SETTINGS (HIDDEN INITIALLY) -->
@@ -2779,6 +2701,9 @@ País: México
 
         </div>
     </div>
+
+    <!-- Elementos ocultos para compatibilidad con JS (no visibles al usuario) -->
+    <div style="display: none; position: absolute; pointer-events: none;" aria-hidden="true">
                     </div>
 
                     <!-- Input -->
@@ -2803,6 +2728,7 @@ País: México
             </div>
         </div>
     </div>
+    <!-- Fin de elementos ocultos -->
 
     <div class="serena-config-drawer" id="serenaConfigDrawer">
         <div class="drawer-overlay" onclick="handleSerenaDrawerOverlayClick(event)"></div>
@@ -7729,12 +7655,7 @@ País: México
                 // Guardar plan para reapertura directa
                 window._onboardingPlanData = (event.data && Array.isArray(event.data.plan) && event.data.plan.length > 0) ? event.data.plan : true;
                 
-                // 2. Abrir el drawer nativo y mostrar el Step 2
-                const drawer = document.getElementById('onboardingConfigDrawer');
-                const overlay = document.getElementById('drawerOverlay');
-                if (drawer) drawer.classList.add('active');
-                if (overlay) overlay.classList.add('active');
-                
+                // 2. El drawer ya está abierto — solo cambiar el contenido de step-1 a step-2
                 document.getElementById('onboarding-step-1').style.display = 'none';
                 document.getElementById('onboarding-drawer-title').innerHTML = '<i class="far fa-sparkles" style="color: var(--ubits-brand-primary);"></i> Plan de Onboarding';
                 document.getElementById('onboarding-step-2').style.display = 'flex';
@@ -7776,19 +7697,34 @@ País: México
         window._onboardingPlanData = null;
 
         window.openOnboardingConfigDrawer = function(stageId) {
+            const drawer = document.getElementById('onboardingConfigDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+
             // Si ya tiene plan configurado, abrir directamente el Step 2
             if (window._onboardingPlanData) {
-                const drawer = document.getElementById('onboardingConfigDrawer');
-                const overlay = document.getElementById('drawerOverlay');
                 if (drawer) drawer.classList.add('active');
                 if (overlay) overlay.classList.add('active');
                 document.getElementById('onboarding-step-1').style.display = 'none';
-                document.getElementById('onboarding-drawer-title').innerHTML = '<i class="far fa-sparkles" style="color: var(--ubits-brand-primary);"></i> Plan de Onboarding';
                 document.getElementById('onboarding-step-2').style.display = 'flex';
                 document.getElementById('onboarding-step-2-footer').style.display = 'flex';
+                document.getElementById('onboarding-drawer-title').innerHTML = '<i class="far fa-sparkles" style="color: var(--ubits-brand-primary);"></i> Plan de Onboarding';
                 return;
             }
-            // Primera vez: abrir el chat de React
+
+            // Primera vez: abrir el drawer con step-1 visible, luego mostrar el iframe del chat encima
+            if (drawer) drawer.classList.add('active');
+            if (overlay) overlay.classList.add('active');
+
+            // Asegurar que step-1 esté visible y step-2 oculto
+            const step1 = document.getElementById('onboarding-step-1');
+            const step2 = document.getElementById('onboarding-step-2');
+            const step2Footer = document.getElementById('onboarding-step-2-footer');
+            if (step1) step1.style.display = 'flex';
+            if (step2) step2.style.display = 'none';
+            if (step2Footer) step2Footer.style.display = 'none';
+            document.getElementById('onboarding-drawer-title').innerHTML = '<i class="far fa-sparkles" style="color: var(--ubits-brand-primary);"></i> Agente de Onboarding';
+
+            // Cargar el iframe del chat encima del drawer (aún full-screen para la experiencia del chat)
             const iframe = document.getElementById('onboardingChatIframe');
             if (iframe) {
                 iframe.src = 'panel-candidatos/chat-only.html?t=' + Date.now();
@@ -9117,9 +9053,6 @@ País: México
         }
 
     </script>
-
-    <!-- iframe for Onboarding Chat (Exact same React code) -->
-    <iframe id="onboardingChatIframe" src="panel-candidatos/chat-only.html" style="position: fixed; inset: 0; width: 100vw; height: 100vh; border: none; z-index: 10000; display: none; background: transparent;"></iframe>
 
 </body>
 </html>

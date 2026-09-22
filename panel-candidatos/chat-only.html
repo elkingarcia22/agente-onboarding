@@ -46,19 +46,28 @@
       }
       #root {
         position: fixed;
-        top: 0; right: 0; bottom: 0;
+        inset: 0;
         display: flex;
         align-items: stretch;
-        justify-content: flex-end;
-        background: transparent !important;
-        pointer-events: none;
+        justify-content: stretch;
+        background: white !important;
       }
-      #root > * { pointer-events: auto; }
+      /* Ocultar el backdrop del drawer de React */
       #backdrop {
-        position: fixed;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.3);
-        cursor: pointer;
+        display: none !important;
+      }
+      /* Forzar al drawer de React a ocupar el 100% sin parecer un drawer */
+      #root > div {
+        width: 100% !important;
+        max-width: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        display: flex;
+        flex-direction: column;
+      }
+      /* Intentar ocultar el header nativo del drawer de React - más seguro */
+      #root header, .drawer-header {
+        display: none !important;
       }
     </style>
   </head>
