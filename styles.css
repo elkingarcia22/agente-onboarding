@@ -585,7 +585,7 @@ html {
         margin: 16px auto 0 auto;
         padding-left: 143px;
         padding-right: 24px;
-        width: 1607px;
+        width: 100%;
         max-width: 1607px;
         box-sizing: border-box;
         overflow-x: hidden;
