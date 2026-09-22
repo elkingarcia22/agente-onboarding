@@ -555,8 +555,8 @@ html {
 .main-content {
     position: relative;
     margin: 16px 24px 0 143px;
-    width: calc(100vw - 143px - 24px);
-    max-width: calc(100vw - 143px - 24px);
+    width: calc(100% - 143px - 24px);
+    max-width: calc(100% - 143px - 24px);
     overflow-x: hidden;
     overflow-y: visible;
     max-height: none;
@@ -595,8 +595,8 @@ html {
 /* Asegurar que main-content no exceda el viewport en pantallas medianas */
 @media (min-width: 1024px) and (max-width: 1439px) {
     .main-content {
-        width: calc(100vw - 143px - 24px);
-        max-width: calc(100vw - 143px - 24px);
+        width: calc(100% - 143px - 24px);
+        max-width: calc(100% - 143px - 24px);
     }
 }
 
@@ -605,8 +605,8 @@ html {
     .main-content {
         gap: 20px;
         margin: 16px 12px 0 12px;
-        width: calc(100vw - 24px);
-        max-width: calc(100vw - 24px);
+        width: calc(100% - 24px);
+        max-width: calc(100% - 24px);
     }
     
     /* Eliminar margen superior del primer elemento para compensar el gap */
@@ -777,8 +777,8 @@ body[data-theme="dark"] .content-area.no-background {
     .main-content {
         margin: 16px 12px 0 108px;
         padding-left: 0;
-        width: calc(100vw - 108px - 12px);
-        max-width: calc(100vw - 108px - 12px);
+        width: calc(100% - 108px - 12px);
+        max-width: calc(100% - 108px - 12px);
         gap: 20px;
         position: relative;
         overflow-x: auto;
@@ -2666,3 +2666,4 @@ body {
 }
 
 
+.content-area, .main-content { min-width: 0; }
